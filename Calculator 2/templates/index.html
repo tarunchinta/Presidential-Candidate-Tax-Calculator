@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Home - Tax Plan Comparison{% endblock %}
+{% block content %}
+<h1>Tax Plan Comparison</h1>
+<form method="post">
+    <div class="form-group">
+        <label for="income">Income Level:</label>
+        <input type="number" class="form-control" id="income" name="income" min="0" max="1000000" step="1000" value="50000">
+    </div>
+    <div class="form-group">
+        <label for="num_kids">Number of Kids:</label>
+        <input type="number" class="form-control" id="num_kids" name="num_kids" min="0" max="20" step="1" value="0" onchange="showKidAges(this.value)">
+    </div>
+    <div id="kids_ages" class="form-group">
+        <!-- Kid ages inputs will go here -->
+    </div>
+    <div class="form-group">
+        <label>Filing Status:</label><br>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="filing_status" id="filing_single" value="single" checked>
+            <label class="form-check-label" for="filing_single">Single</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="filing_status" id="filing_married" value="married">
+            <label class="form-check-label" for="filing_married">Married Filing Jointly</label>
+        </div>
+        <!-- Add more filing statuses as needed -->
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+    function showKidAges(num_kids) {
+        let container = document.getElementById('kids_ages');
+        container.innerHTML = '';
+        for(let i = 1; i <= num_kids; i++) {
+            let div = document.createElement('div');
+            div.className = 'form-group';
+            let label = document.createElement('label');
+            label.htmlFor = 'kid_' + i + '_age';
+            label.innerHTML = 'Age of Kid ' + i + ': ';
+            let input = document.createElement('input');
+            input.type = 'number';
+            input.className = 'form-control';
+            input.id = 'kid_' + i + '_age';
+            input.name = 'kid_' + i + '_age';
+            input.min = '0';
+            input.max = '25';
+            input.value = '0';
+            div.appendChild(label);
+            div.appendChild(input);
+            container.appendChild(div);
+        }
+    }
+</script>
+{% endblock %}

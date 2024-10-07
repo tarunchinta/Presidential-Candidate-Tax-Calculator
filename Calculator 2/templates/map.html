@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}USA Map Visual - Tax Plan Comparison{% endblock %}
+{% block head %}
+    {{ super() }}
+    <!-- Include Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+{% block content %}
+<h1>Median Income and Effective Tax Rates by State</h1>
+<button id="backButton" class="btn btn-secondary" style="display:none;">Back to State Map</button>
+<div id="map"></div>
+<script>
+    var graphJSON = {{ graphJSON|safe }};
+    Plotly.newPlot('map', graphJSON.data, graphJSON.layout, {responsive: true});
+
+    var mapDiv = document.getElementById('map');
+    var backButton = document.getElementById('backButton');
+
+    mapDiv.on('plotly_click', function(data){
+        var stateCode = data.points[0].location;
+        console.log("Clicked on state: " + stateCode);
+        // Fetch county data for the clicked state
+        fetch('/get_county_data/' + stateCode)
+            .then(response => response.json())
+            .then(countyGraphJSON => {
+                // Update the map with county data
+                Plotly.react('map', countyGraphJSON.data, countyGraphJSON.layout, {responsive: true});
+                backButton.style.display = 'block';
+            });
+    });
+
+    backButton.addEventListener('click', function(){
+        // Reload the state-level map
+        Plotly.react('map', graphJSON.data, graphJSON.layout, {responsive: true});
+        backButton.style.display = 'none';
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Results - Tax Plan Comparison{% endblock %}
+{% block content %}
+<h1>Tax Plan Comparison Results</h1>
+<p><strong>Your Income:</strong> ${{ income }}</p>
+<p><strong>Filing Status:</strong> {{ filing_status.title() }}</p>
+<p><strong>Number of Kids:</strong> {{ num_kids }}</p>
+<p><strong>Kids' Ages:</strong> {{ kids_ages }}</p>
+<hr>
+<h2>Trump's Tax Plan</h2>
+<p><strong>Total Tax:</strong> ${{ trump_tax }}</p>
+<p><strong>Effective Tax Rate:</strong> {{ trump_rate }}%</p>
+<hr>
+<h2>Harris's Tax Plan</h2>
+<p><strong>Total Tax:</strong> ${{ harris_tax }}</p>
+<p><strong>Effective Tax Rate:</strong> {{ harris_rate }}%</p>
+<hr>
+<h2>Comparison</h2>
+{% if trump_tax < harris_tax %}
+    <p>Trump's tax plan results in lower taxes for you.</p>
+{% elif trump_tax > harris_tax %}
+    <p>Harris's tax plan results in lower taxes for you.</p>
+{% else %}
+    <p>Both tax plans result in the same taxes for you.</p>
+{% endif %}
+<a href="{{ url_for('index') }}" class="btn btn-primary">Go Back</a>
+{% endblock %}
